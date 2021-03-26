@@ -1,6 +1,6 @@
 from menu import *
 
-def region_loop():
+def region_loop_death():
     while True:
         region_menu()
         choice = int(input("Enter your choice [1-%d]: " % len(region_options)))
@@ -23,7 +23,7 @@ def region_loop():
     
     return 
 
-def timeline_loop():
+def timeline_loop_death():
     while True:
         timeline_menu()
         choice = int(input("Enter your choice [1-%d]: " % len(timeline_options)))
@@ -52,7 +52,7 @@ def timeline_loop():
     
     return 
 
-def gender_loop():
+def gender_loop_death():
     while True:
         gender_menu()
         choice = int(input("Enter your choice [1-%d]: " % len(gender_options)))
@@ -71,7 +71,7 @@ def gender_loop():
     
     return
 
-def agegroup_loop():
+def agegroup_loop_death():
     while True:
         ageGroup_menu()
         choice = int(input("Enter your choice [1-%d]: " % len(ageGroup_Options)))
@@ -100,7 +100,7 @@ def agegroup_loop():
     
     return
 
-def occupation_loop():
+def occupation_loop_death():
     while True:
         occupation_menu()
         choice = int(input("Enter your choice [1-%d]: " % len(occupation_options)))
@@ -123,5 +123,26 @@ def occupation_loop():
     
     return
 
-def combinedFilter_loop():
+def hospitalization_loop_death():
+    while True:
+        hospitalization_menu()
+        choice = int(input("Enter your choice [1-%d]: " % len(hospitalization_options)))
+
+        if choice==1:
+            print(1)
+        elif choice==2:
+            print(2)
+        elif choice==3:
+            print(3)
+        elif choice==4:
+            break
+        else:
+            input("Wrong option selection. Enter any key to try again..")
+    
+    return
+
+def allDeaths():
+    print("All deaths")
+    
+def combinedFilter_loop_death():
     print("Combined Filter")
