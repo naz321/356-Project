@@ -87,10 +87,10 @@ def hospitalization_loop_death():
 
         if choice>=1 and choice<=3:
             cursor.execute("SELECT COUNT(*) FROM Deaths WHERE hospitalStatus=%s", (choice,)) 
-            print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose hospital stats was", hospitalization_options[choice-1])
+            print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose hospital status was", hospitalization_options[choice-1])
         elif choice==4:
             cursor.execute("SELECT COUNT(*) FROM Deaths WHERE hospitalStatus=%s", (9,)) 
-            print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose hospital stats was", hospitalization_options[choice-1])
+            print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose hospital status was", hospitalization_options[choice-1])
         elif choice==5:
             break
         else:
