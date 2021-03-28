@@ -7,7 +7,7 @@ timeline_options = ["Week 36 (Week of September 6th)", "Week 37 (Week of Septemb
 gender_options = ["Male", "Female", "Not Stated/Other", "Go Back"]
 ageGroup_Options = ["0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "Go back"]
 occupation_options = ["Health Care Workers", "School or daycare workers", "Long term care residents", "Other", "Not Stated", "Go Back"]
-hospitalization_options = ["Hospitalized (ICU)", "Hospitalized (Non-ICU)", "Non-Hospitalized", "Go Back"]
+hospitalization_options = ["Hospitalized (ICU)", "Hospitalized (Non-ICU)", "Non-Hospitalized", "Not stated", "Go Back"]
 weeklyTesting_options = ["Region", "Timeline", "Region and Timeline", "Go Back"]
 
 def home_screen_menu():
