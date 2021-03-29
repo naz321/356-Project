@@ -52,11 +52,11 @@ def gender_loop_recovered():
 def agegroup_loop_recovered():
     while True:
         ageGroup_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(ageGroup_Options)))
+        choice = int(input("Enter your choice [1-%d]: " % len(ageGroup_options)))
 
         if choice>=1 and choice <= 8:
             cursor.execute("SELECT COUNT(*) FROM Recovered inner join BackgroundInfo on Recovered.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s", (choice,)) 
-            print("There were", cursor.fetchone()[0], "recovered cases of COVID-19 that was in this age group:", ageGroup_Options[choice-1])
+            print("There were", cursor.fetchone()[0], "recovered cases of COVID-19 that was in this age group:", ageGroup_options[choice-1])
         elif choice==9:
             break
         else:
