@@ -13,7 +13,7 @@ def region_testing_loop():
             break
         else:
             input("Wrong option selection. Enter any key to try again..")
-    return 
+    return
 
 def timeline_testing_loop():
     while True:
