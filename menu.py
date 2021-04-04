@@ -10,7 +10,9 @@ ageGroup_options = ["0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79"
 occupation_options = ["Health Care Workers", "School or daycare workers", "Long term care residents", "Other", "Not Stated", "Go Back"]
 hospitalization_options = ["Hospitalized (ICU)", "Hospitalized (Non-ICU)", "Non-Hospitalized", "Not stated", "Go Back"]
 weeklyTesting_options = ["Region", "Timeline", "Region and Timeline", "Go Back"]
-
+transmissions_options = ["Region", "Timeline", "Gender", "Age group", "Occupation", "All Transmissions", "More than 1 filter", "Go Back"]
+asymptomatic_options = ["Yes", "No", "Don't care", "Go Back"]
+transmissions_type_options = ["Contact of COVID Case", "Internation Travel", "Don't Care", "Go Back"]
 # Combined Filter Options
 region_options_all = ["Atlantic (New Brunswick, Nova Scotia, Prince Edward Island, Newfoundland and Labrador)", "Quebec", "Ontario and Nunavut", "Prairies (Alberta, Saskatchewan, Manitoba, Northwest Territories)", "Northwest Territories (British Columbia, Yukon)", "All"]
 timeline_options_all = ["Week 36 (Week of September 6th)", "Week 37 (Week of September 13th)", "Week 38 (Week of September 20th)", "Week 39 (Week of September 27th)", "Week 40 (Week of October 4th)", "Week 41 (Week of October 11th)", "Week 42 (Week of October 18th)", "Week 43 (Week of October 25th)", "All"]
@@ -33,6 +35,20 @@ def general_information_menu():
     print (30 * "-" , "MENU" , 30 * "-")
     print ("Choose a Filter")
     for i, option in enumerate(background_information_options):
+        print("%s)" % (i+1), option)
+    print (67 * "-")
+
+def asymptomatic_menu():      
+    print (30 * "-" , "MENU" , 30 * "-")
+    print ("Choose if asymptomatic")
+    for i, option in enumerate(asymptomatic_options):
+        print("%s)" % (i+1), option)
+    print (67 * "-")
+
+def transmissions_type_menu():      
+    print (30 * "-" , "MENU" , 30 * "-")
+    print ("Choose Transmission Type")
+    for i, option in enumerate(transmissions_type_options):
         print("%s)" % (i+1), option)
     print (67 * "-")
 
@@ -89,6 +105,13 @@ def recovered_menu():
     print (30 * "-" , "MENU" , 30 * "-")
     print ("Choose a Filter")
     for i, option in enumerate(recovered_options):
+        print("%s)" % (i+1), option)
+    print (67 * "-")
+
+def transmissions_menu():      
+    print (30 * "-" , "MENU" , 30 * "-")
+    print ("Choose a Filter")
+    for i, option in enumerate(transmissions_options):
         print("%s)" % (i+1), option)
     print (67 * "-")
 
