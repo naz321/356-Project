@@ -69,7 +69,7 @@ def gender_loop_transmissions(a, t):
                 cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.gender=%s", (choice,)) 
                 print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose gender was", gender_options[choice-1])
         elif choice==3:
-             if (a != 3 and t == 3):
+            if (a != 3 and t == 3):
                 cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.gender=%s and asymptomatic=%s", (9, a,)) 
                 print("There were", cursor.fetchone()[0], "confirmed deaths due to COVID-19 whose gender was", gender_options[choice-1])
             elif (t != 3 and a == 3):
