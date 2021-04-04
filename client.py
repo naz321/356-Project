@@ -166,7 +166,77 @@ def weekly_testing_loop():
         else:
             input("Wrong option selection. Enter any key to try again..")
     
-    return  
+    return
+
+def reporting_loop():
+
+    while True:
+        print("Region")
+        for i, option in enumerate(region_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        regionChoice = int(input("Enter your choice [1-%d]: " % (len(region_options)-1)))
+
+        print("Timeline")
+        for i, option in enumerate(timeline_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        timeLineChoice = int(input("Enter your choice [1-%d]: " % (len(timeline_options)-1)))
+
+        print("Gender")
+        for i, option in enumerate(gender_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        genderChoice = int(input("Enter your choice [1-%d]: " % (len(gender_options)-1)))
+
+        print("Age Group")
+        for i, option in enumerate(ageGroup_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        ageGroupChoice = int(input("Enter your choice [1-%d]: " % (len(ageGroup_options)-1)))
+
+        print("Occupation")
+        for i, option in enumerate(occupation_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        occupationChoice = int(input("Enter your choice [1-%d]: " % (len(occupation_options)-1)))
+
+        print("Did the patient recover or did they die or are they currently infected?")
+        for i, option in enumerate(recovered_or_died_options):
+            print("\t%s)" % (i+1), option)
+        currentStatus = int(input("Enter your choice [1-%d]: " % (len(occupation_options)-1)))
+
+        # Insert into Background information
+        insertQuery = "INSERT INTO BackgroundInfo (region, episodeWeek, gender, ageGroup, occupation) VALUES (%d, %d, %d, %d, %d)" % (regionChoice, timeLineChoice+35, genderChoice, ageGroupChoice, occupationChoice)
+        # print(insertQuery)
+        cursor.execute(insertQuery)
+        caseID = cursor.lastrowid
+        # print(caseID)
+
+        if currentStatus == 1 or currentStatus == 2:
+            print("Hospital Status")
+            for i, option in enumerate(hospitalization_options[:-1]):
+                print("\t%s)" % (i+1), option)
+            hospitalizationChoice = int(input("Enter your choice [1-%d]: " % (len(hospitalization_options)-1)))
+
+            if currentStatus == 1: # Insert into recovered table
+                insertRecoveredQuery = "INSERT INTO Recovered (caseID, hospitalStatus, episodeWeek) VALUES (%d, %d, %d)" % (caseID, hospitalizationChoice,99)
+                # print(insertRecoveredQuery)
+                cursor.execute(insertRecoveredQuery)
+            elif currentStatus == 2: # Insert into deaths table
+                insertDeathQuery = "INSERT INTO Deaths (caseID, hospitalStatus) VALUES (%d, %d)" % (caseID, hospitalizationChoice)
+                # print(insertDeathQuery)
+                cursor.execute(insertDeathQuery)
+
+        # Save all changes to the database
+        print("COVID-19 case reported successfully!")
+        mydb.commit()
+
+        choice = input("Would you like to report another case [y/n]: ")
+
+        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
+            break
+        elif choice == 'Y' or choice == 'y' or choice == 'Yes' or choice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
+
+    return    
 
 #### Main Code ####
 home_screen_menu()
@@ -186,6 +256,8 @@ while mainLoop:
     elif choice==5:
         weekly_testing_loop()
     elif choice==6:
+        reporting_loop()
+    elif choice==7:
         print("Goodbye!")
         mainLoop=False
     else:

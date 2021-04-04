@@ -1,5 +1,5 @@
 # Regular Options
-main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Exit"]
+main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Exit"]
 background_information_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "More than 1 Filter", "Go Back"]
 death_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Deaths", "More than 1 Filter", "Go Back"]
 recovered_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Recovered", "More than 1 Filter", "Go Back"]
@@ -13,6 +13,8 @@ weeklyTesting_options = ["Region", "Timeline", "Region and Timeline", "Go Back"]
 transmissions_options = ["Region", "Timeline", "Gender", "Age group", "Occupation", "All Transmissions", "More than 1 filter", "Go Back"]
 asymptomatic_options = ["Yes", "No", "Don't care", "Go Back"]
 transmissions_type_options = ["Contact of COVID Case", "Internation Travel", "Don't Care", "Go Back"]
+recovered_or_died_options = ["Recovered", "Died", "Currently Infected"]
+
 # Combined Filter Options
 region_options_all = ["Atlantic (New Brunswick, Nova Scotia, Prince Edward Island, Newfoundland and Labrador)", "Quebec", "Ontario and Nunavut", "Prairies (Alberta, Saskatchewan, Manitoba, Northwest Territories)", "Northwest Territories (British Columbia, Yukon)", "All"]
 timeline_options_all = ["Week 36 (Week of September 6th)", "Week 37 (Week of September 13th)", "Week 38 (Week of September 20th)", "Week 39 (Week of September 27th)", "Week 40 (Week of October 4th)", "Week 41 (Week of October 11th)", "Week 42 (Week of October 18th)", "Week 43 (Week of October 25th)", "All"]
@@ -119,6 +121,13 @@ def weekly_testing_menu():
     print (30 * "-" , "MENU" , 30 * "-")
     print ("Choose a Filter")
     for i, option in enumerate(weeklyTesting_options):
+        print("%s)" % (i+1), option)
+    print (67 * "-")
+
+def recovered_or_died_menu():
+    print (30 * "-" , "MENU" , 30 * "-")
+    print ("Choose a Filter")
+    for i, option in enumerate(recovered_or_died_options):
         print("%s)" % (i+1), option)
     print (67 * "-")
 
