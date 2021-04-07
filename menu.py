@@ -1,5 +1,7 @@
+from mysqlInformation import *
+
 # Regular Options
-main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Exit"]
+main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Add a new location", "Exit"]
 background_information_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "More than 1 Filter", "Go Back"]
 death_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Deaths", "More than 1 Filter", "Go Back"]
 recovered_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Recovered", "More than 1 Filter", "Go Back"]
@@ -54,10 +56,18 @@ def transmissions_type_menu():
         print("%s)" % (i+1), option)
     print (67 * "-")
 
-def region_menu():      
+def getNewRegionOptions():
+    cursor.execute("SELECT CONCAT(groupName,' ','(', provinces ,')') FROM Location;") 
+    result = cursor.fetchall()
+    regionOptions =  [row[0] for row in result]
+    regionOptions.append("Go Back") 
+    return regionOptions
+
+def region_menu():
+    newRegionOptionsFromDb = getNewRegionOptions()   
     print (30 * "-" , "MENU" , 30 * "-")
     print ("Choose a Region")
-    for i, option in enumerate(region_options):
+    for i, option in enumerate(newRegionOptionsFromDb):
         print("%s)" % (i+1), option)
     print (67 * "-")
 

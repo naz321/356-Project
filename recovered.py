@@ -2,16 +2,18 @@ from menu import *
 from mysqlInformation import *
 
 def region_loop_recovered():
+    newRegionOptionsFromDb = getNewRegionOptions()   
+
     while True:
         region_menu()
 
         try:
-            choice = int(input("Enter your choice [1-%d]: " % len(region_options)))
+            choice = int(input("Enter your choice [1-%d]: " % len(newRegionOptionsFromDb)))
 
-            if choice >= 1 and choice <=5:
+            if choice >= 1 and choice <= (len(newRegionOptionsFromDb)-1):
                 cursor.execute("select count(*) FROM Recovered inner join BackgroundInfo on Recovered.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.region=%s", (choice,)) 
-                print("There were", cursor.fetchone()[0], "recovered cases of COVID-19 in the", region_options[choice-1], "region." )
-            elif choice==6:
+                print("There were", cursor.fetchone()[0], "recovered cases of COVID-19 in the", newRegionOptionsFromDb[choice-1], "region." )
+            elif choice==len(newRegionOptionsFromDb):
                 break
             else:
                 input("Wrong option selection. Enter any key to try again..")

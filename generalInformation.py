@@ -2,16 +2,18 @@ from menu import *
 from mysqlInformation import *
 
 def region_loop():
+    newRegionOptionsFromDb = getNewRegionOptions()   
+
     while True:
         region_menu()
 
         try:
-            choice = int(input("Enter your choice [1-%d]: " % len(region_options)))
+            choice = int(input("Enter your choice [1-%d]: " % len(newRegionOptionsFromDb)))
 
-            if choice >= 1 and choice <=5:
+            if choice >= 1 and choice <= (len(newRegionOptionsFromDb)-1):
                 cursor.execute("SELECT COUNT(*) FROM BackgroundInfo WHERE region=%s", (choice,)) 
-                print("There were", cursor.fetchone()[0], "confirmed cases of COVID-19 in the", region_options[choice-1], "region." )
-            elif choice==6:
+                print("There were", cursor.fetchone()[0], "confirmed cases of COVID-19 in the", newRegionOptionsFromDb[choice-1], "region." )
+            elif choice==len(newRegionOptionsFromDb):
                 break
             else:
                 input("Wrong option selection. Enter any key to try again..")
@@ -112,14 +114,16 @@ def combinedFilter_loop():
         print (30 * "-" , "MENU" , 30 * "-")
 
         print("Region")
+        newRegionOptionsFromDb = getNewRegionOptions()
+        newRegionOptionsFromDb[-1] = "All"  
         while True:
-            for i, option in enumerate(region_options_all):
+            for i, option in enumerate(newRegionOptionsFromDb):
                 print("\t%s)" % (i+1), option)
-            regionChoice = input("Input as a list separated by commas and press enter: ") or str(len(region_options_all))
+            regionChoice = input("Input as a list separated by commas and press enter: ") or str(len(newRegionOptionsFromDb))
 
             invalidChoice = 0
             for choice in regionChoice.split(","):
-                if int(choice) > len(region_options_all):
+                if int(choice) > len(newRegionOptionsFromDb):
                     input("Wrong option selection. Enter any key to try again..")
                     invalidChoice = -1
                     break
@@ -203,7 +207,7 @@ def combinedFilter_loop():
 
         print (67 * "-")
 
-        if str(len(region_options_all)) in regionChoice and \
+        if str(len(newRegionOptionsFromDb)) in regionChoice and \
             str(len(timeline_options_all)) in timeLineChoice and \
             str(len(gender_options_all)) in genderChoice and \
             str(len(ageGroup_options_all)) in ageGroupChoice and \
@@ -212,7 +216,7 @@ def combinedFilter_loop():
         else:
             baseQuery = "SELECT COUNT(*) FROM BackgroundInfo WHERE "
 
-            if regionChoice and (str(len(region_options_all)) not in regionChoice):
+            if regionChoice and (str(len(newRegionOptionsFromDb)) not in regionChoice):
                 baseQuery += "region IN (%s) AND " % regionChoice
 
             if timeLineChoice and (str(len(timeline_options_all)) not in timeLineChoice):

@@ -172,9 +172,10 @@ def reporting_loop():
 
     while True:
         print("Region")
-        for i, option in enumerate(region_options[:-1]):
+        newRegionOptionsFromDb = getNewRegionOptions()   
+        for i, option in enumerate(newRegionOptionsFromDb[:-1]):
             print("\t%s)" % (i+1), option)
-        regionChoice = int(input("Enter your choice [1-%d]: " % (len(region_options)-1)))
+        regionChoice = int(input("Enter your choice [1-%d]: " % (len(newRegionOptionsFromDb)-1)))
 
         print("Timeline")
         for i, option in enumerate(timeline_options[:-1]):
@@ -236,6 +237,50 @@ def reporting_loop():
         else:
             input("Wrong option selection. Enter any key to try again..")
 
+    return
+
+def new_location_loop():
+
+    while True:
+        
+        while True:
+            city = input("Enter city name: ")
+            if city == '':
+                input("Invalid Input. Enter any key to try again..")
+            else:
+                break
+        
+        while True:
+            province = input("Enter province: ")
+            if province == '':
+                input("Invalid Input. Enter any key to try again..")
+            else:
+                break
+
+        cursor.execute("SELECT MAX(region) FROM Location")
+        regionID = cursor.fetchone()[0]
+        # print(regionID)
+        # Insert into Location Table
+        insertQuery = "INSERT INTO Location (region, groupName, provinces) VALUES (%d, '%s', '%s')" % (regionID+1, city, province)
+        # print(insertQuery)
+        cursor.execute(insertQuery)
+
+        # Save all changes to the database
+        print("City successfully added!")
+        mydb.commit()
+
+        # Add changes to new list
+        region_options.insert(-1, "%s (%s)" %(city, province))
+
+        choice = input("Would you like to report another case [y/n]: ")
+
+        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
+            break
+        elif choice == 'Y' or choice == 'y' or choice == 'Yes' or choice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
+    
     return    
 
 #### Main Code ####
@@ -258,6 +303,8 @@ while mainLoop:
     elif choice==6:
         reporting_loop()
     elif choice==7:
+        new_location_loop()
+    elif choice==8:
         print("Goodbye!")
         mainLoop=False
     else:
