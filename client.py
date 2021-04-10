@@ -5,17 +5,12 @@ from recovered import *
 from weeklyTesting import *
 from transmissions import *
 
-## Text menu in Python
-
-### Global variables
-mainLoop=True
-
 def general_information_loop():
 
     while True:
         general_information_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(background_information_options)))
-
+        choice = inputPrompt(background_information_options, len(background_information_options))
+        
         if choice==1:
             region_loop()
         elif choice==2:
@@ -30,8 +25,6 @@ def general_information_loop():
             combinedFilter_loop()
         elif choice==7:
             break
-        else:
-            input("Wrong option selection. Enter any key to try again..")
     
     return
 
@@ -39,7 +32,7 @@ def death_loop():
 
     while True:
         death_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(death_options)))
+        choice = inputPrompt(death_options, len(death_options))
 
         if choice==1:
             region_loop_death()
@@ -59,8 +52,6 @@ def death_loop():
             combinedFilter_loop_death()
         elif choice==9:
             break
-        else:
-            input("Wrong option selection. Enter any key to try again..")
     
     return
 
@@ -68,7 +59,7 @@ def recovered_loop():
 
     while True:
         recovered_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(recovered_options)))
+        choice = inputPrompt(recovered_options, len(recovered_options))
 
         if choice==1:
             region_loop_recovered()
@@ -96,7 +87,7 @@ def recovered_loop():
 def transmissions_loop_asymptomatic():
     while True:
         asymptomatic_menu()
-        asymptomatic_choice = int(input("Enter your choice [1-%d]: " % len(asymptomatic_options)))
+        asymptomatic_choice = inputPrompt(asymptomatic_options, len(asymptomatic_options))
 
         if asymptomatic_choice >= 1 and asymptomatic_choice <=3:
             transmissions_loop_transmissions_type(asymptomatic_choice)
@@ -110,7 +101,7 @@ def transmissions_loop_asymptomatic():
 def transmissions_loop_transmissions_type(asymp_choice):
     while True: 
         transmissions_type_menu()
-        transmission_type_choice = int(input("Enter your choice [1-%d]: " % len(transmissions_type_options)))
+        transmission_type_choice = inputPrompt(transmissions_type_options, len(transmissions_type_options))
 
         if transmission_type_choice >= 1 and transmission_type_choice <=3:
             transmission_loop(asymp_choice, transmission_type_choice)
@@ -125,7 +116,7 @@ def transmission_loop(a_choice, t_choice):
 
     while True:
         transmissions_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(transmissions_options)))
+        choice = inputPrompt(transmissions_options, len(transmissions_options))
 
         if choice==1:
             region_loop_transmissions(a_choice, t_choice)
@@ -153,7 +144,7 @@ def weekly_testing_loop():
 
     while True:
         weekly_testing_menu()
-        choice = int(input("Enter your choice [1-%d]: " % len(weeklyTesting_options)))
+        choice = inputPrompt(weeklyTesting_options, len(weeklyTesting_options))
 
         if choice==1:
             region_testing_loop()
@@ -163,9 +154,7 @@ def weekly_testing_loop():
             regionAndTimeline_loop()
         elif choice==4:
             break
-        else:
-            input("Wrong option selection. Enter any key to try again..")
-    
+
     return
 
 def reporting_loop():
@@ -175,32 +164,36 @@ def reporting_loop():
         newRegionOptionsFromDb = getNewRegionOptions()   
         for i, option in enumerate(newRegionOptionsFromDb[:-1]):
             print("\t%s)" % (i+1), option)
-        regionChoice = int(input("Enter your choice [1-%d]: " % (len(newRegionOptionsFromDb)-1)))
+        regionChoice = inputPrompt(newRegionOptionsFromDb[:-1], len(newRegionOptionsFromDb)-1)
 
         print("Timeline")
         for i, option in enumerate(timeline_options[:-1]):
             print("\t%s)" % (i+1), option)
-        timeLineChoice = int(input("Enter your choice [1-%d]: " % (len(timeline_options)-1)))
+        timeLineChoice = inputPrompt(timeline_options[:-1], len(timeline_options)-1)
 
         print("Gender")
         for i, option in enumerate(gender_options[:-1]):
             print("\t%s)" % (i+1), option)
-        genderChoice = int(input("Enter your choice [1-%d]: " % (len(gender_options)-1)))
+        genderChoice = inputPrompt(gender_options[:-1], len(gender_options)-1)
+        if genderChoice == 3: # change non stated/other
+            genderChoice = 9
 
         print("Age Group")
         for i, option in enumerate(ageGroup_options[:-1]):
             print("\t%s)" % (i+1), option)
-        ageGroupChoice = int(input("Enter your choice [1-%d]: " % (len(ageGroup_options)-1)))
+        ageGroupChoice = inputPrompt(ageGroup_options[:-1], len(ageGroup_options)-1)
 
         print("Occupation")
         for i, option in enumerate(occupation_options[:-1]):
             print("\t%s)" % (i+1), option)
-        occupationChoice = int(input("Enter your choice [1-%d]: " % (len(occupation_options)-1)))
+        occupationChoice = inputPrompt(occupation_options[:-1], len(occupation_options)-1)
+        if occupationChoice == 5: # change not stated
+            occupationChoice = 9
 
         print("Did the patient recover or did they die or are they currently infected?")
         for i, option in enumerate(recovered_or_died_options):
             print("\t%s)" % (i+1), option)
-        currentStatus = int(input("Enter your choice [1-%d]: " % (len(occupation_options)-1)))
+        currentStatus = inputPrompt(recovered_or_died_options, len(recovered_or_died_options))
 
         # Insert into Background information
         insertQuery = "INSERT INTO BackgroundInfo (region, episodeWeek, gender, ageGroup, occupation) VALUES (%d, %d, %d, %d, %d)" % (regionChoice, timeLineChoice+35, genderChoice, ageGroupChoice, occupationChoice)
@@ -213,7 +206,7 @@ def reporting_loop():
             print("Hospital Status")
             for i, option in enumerate(hospitalization_options[:-1]):
                 print("\t%s)" % (i+1), option)
-            hospitalizationChoice = int(input("Enter your choice [1-%d]: " % (len(hospitalization_options)-1)))
+            hospitalizationChoice = inputPrompt(hospitalization_options[:-1], len(hospitalization_options)-1)
 
             if currentStatus == 1: # Insert into recovered table
                 insertRecoveredQuery = "INSERT INTO Recovered (caseID, hospitalStatus, episodeWeek) VALUES (%d, %d, %d)" % (caseID, hospitalizationChoice,99)
@@ -283,29 +276,102 @@ def new_location_loop():
     
     return    
 
+def edit_data_loop():
+    print("A government account can edit data... Please Login")
+    login = input("Login: ")
+    password = input("Password: ") 
+    
+    if not(login == "root" and password == "root"):
+        print("Wrong login or password")
+        return
+
+    # check if they want to edit data
+    while True:
+        choice = input("Would you like to edit data [y/n]: ")
+
+        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
+            return 
+
+        # find a valid caseId
+        cursor.execute("SELECT MAX(caseID) FROM BackgroundInfo")
+        maxCaseId = cursor.fetchone()[0]
+        caseId = 1
+        while True:
+            try:
+                caseId = int(input("Enter a caseId: "))
+                if caseId > maxCaseId or caseId <= 0:
+                    input("Invalid option selection. Enter any key to try again..")
+                    continue
+                else:
+                    break
+            except ValueError:
+                input("Invalid option selection. Enter any key to try again..")
+
+        print("Region")
+        newRegionOptionsFromDb = getNewRegionOptions()   
+        for i, option in enumerate(newRegionOptionsFromDb[:-1]):
+            print("\t%s)" % (i+1), option)
+        regionChoice = inputPrompt(newRegionOptionsFromDb[:-1], len(newRegionOptionsFromDb)-1)
+
+        print("Timeline")
+        for i, option in enumerate(timeline_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        timeLineChoice = inputPrompt(timeline_options[:-1], len(timeline_options)-1)
+
+        print("Gender")
+        for i, option in enumerate(gender_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        genderChoice = inputPrompt(gender_options[:-1], len(gender_options)-1)
+        if genderChoice == 3: # change non stated/other
+            genderChoice = 9
+
+        print("Age Group")
+        for i, option in enumerate(ageGroup_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        ageGroupChoice = inputPrompt(ageGroup_options[:-1], len(ageGroup_options)-1)
+
+        print("Occupation")
+        for i, option in enumerate(occupation_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        occupationChoice = inputPrompt(occupation_options[:-1], len(occupation_options)-1)
+        if occupationChoice == 5: # change not stated
+            occupationChoice = 9
+
+        updateQuery = "UPDATE BackgroundInfo SET region = %d, episodeWeek = %d, gender = %d, ageGroup = %d, occupation = %d WHERE caseID = %d" % (regionChoice, timeLineChoice+35, genderChoice, ageGroupChoice, occupationChoice, caseId)
+        # print(updateQuery)
+
+        cursor.execute(updateQuery)
+
+        # Save all changes to the database
+        print("Record successfully updated!")
+        mydb.commit()
+
 #### Main Code ####
 home_screen_menu()
 
-while mainLoop:          
-    print_menu()    ## Displays menu
-    choice = int(input("Enter your choice [1-%d]: " % len(main_options)))
-    
-    if choice==1:     
-        general_information_loop()
-    elif choice==2:
-        death_loop()
-    elif choice==3:
-        recovered_loop()
-    elif choice==4:
-        transmissions_loop_asymptomatic()
-    elif choice==5:
-        weekly_testing_loop()
-    elif choice==6:
-        reporting_loop()
-    elif choice==7:
-        new_location_loop()
-    elif choice==8:
-        print("Goodbye!")
-        mainLoop=False
-    else:
-        input("Wrong option selection. Enter any key to try again..")
+def main():
+    while True:          
+        print_menu()    ## Displays menu
+        choice = inputPrompt(main_options, len(main_options))
+
+        if choice==1:     
+            general_information_loop()
+        elif choice==2:
+            death_loop()
+        elif choice==3:
+            recovered_loop()
+        elif choice==4:
+            transmissions_loop_asymptomatic()
+        elif choice==5:
+            weekly_testing_loop()
+        elif choice==6:
+            reporting_loop()
+        elif choice==7:
+            new_location_loop()
+        elif choice==8:
+            edit_data_loop()
+        elif choice==9:
+            print("Goodbye!")
+            break
+
+main()

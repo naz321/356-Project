@@ -1,7 +1,7 @@
 from mysqlInformation import *
 
 # Regular Options
-main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Add a new location", "Exit"]
+main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Add a new location", "Government Login", "Exit"]
 background_information_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "More than 1 Filter", "Go Back"]
 death_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Deaths", "More than 1 Filter", "Go Back"]
 recovered_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Recovered", "More than 1 Filter", "Go Back"]
@@ -23,6 +23,25 @@ timeline_options_all = ["Week 36 (Week of September 6th)", "Week 37 (Week of Sep
 gender_options_all = ["Male", "Female", "Not Stated/Other", "All"]
 ageGroup_options_all = ["0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "All"]
 occupation_options_all = ["Health Care Workers", "School or daycare workers", "Long term care residents", "Other", "Not Stated", "All"]
+
+def inputPrompt(options, maxValue):
+    while True:
+        try:
+            choice = int(input("Enter your choice [1-%d]: " % len(options)))
+
+            if not (checkInput(maxValue, choice)):
+                input("Wrong option selection. Enter any key to try again..")
+            else:
+                return choice
+        except ValueError:  
+            input("Wrong option selection. Enter any key to try again..")
+
+
+def checkInput(maxValue, choice):
+    if choice > 0 and choice <= maxValue:
+        return True
+    else:
+        return False
 
 def home_screen_menu():
     print (24 * "-" , "COVID-19 Project" , 24 * "-")
