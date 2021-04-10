@@ -287,10 +287,9 @@ def edit_data_loop():
 
     # check if they want to edit data
     while True:
-        choice = input("Would you like to edit data [y/n]: ")
-
-        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
-            return 
+        for i, option in enumerate(update_or_delete_options):
+            print("\t%s)" % (i+1), option)
+        choice = inputPrompt(update_or_delete_options, len(update_or_delete_options))
 
         # find a valid caseId
         cursor.execute("SELECT MAX(caseID) FROM BackgroundInfo")
@@ -298,53 +297,36 @@ def edit_data_loop():
         caseId = 1
         while True:
             try:
-                caseId = int(input("Enter a caseId: "))
+                caseId = int(input("Enter a caseId [1-%d]: " % maxCaseId))
                 if caseId > maxCaseId or caseId <= 0:
                     input("Invalid option selection. Enter any key to try again..")
                     continue
                 else:
-                    break
+                    cursor.execute("SELECT * FROM BackgroundInfo WHERE caseID = %d" % caseId)
+                    present = cursor.fetchone()
+                    if not present: # it has recently been deleted
+                        input("CaseID no longer exists. Enter any key to try again..")
+                        continue
+                    else:
+                        break
             except ValueError:
                 input("Invalid option selection. Enter any key to try again..")
 
-        print("Region")
-        newRegionOptionsFromDb = getNewRegionOptions()   
-        for i, option in enumerate(newRegionOptionsFromDb[:-1]):
-            print("\t%s)" % (i+1), option)
-        regionChoice = inputPrompt(newRegionOptionsFromDb[:-1], len(newRegionOptionsFromDb)-1)
+        if choice == 1:
+            updateData(caseId)
+        else:
+            deleteData(caseId)
 
-        print("Timeline")
-        for i, option in enumerate(timeline_options[:-1]):
-            print("\t%s)" % (i+1), option)
-        timeLineChoice = inputPrompt(timeline_options[:-1], len(timeline_options)-1)
+        continueChoice = input("Would you like to continue [y/n]: ")
 
-        print("Gender")
-        for i, option in enumerate(gender_options[:-1]):
-            print("\t%s)" % (i+1), option)
-        genderChoice = inputPrompt(gender_options[:-1], len(gender_options)-1)
-        if genderChoice == 3: # change non stated/other
-            genderChoice = 9
+        if continueChoice == 'N' or continueChoice == 'n' or continueChoice == 'No' or continueChoice == 'no':
+            break
+        elif continueChoice == 'Y' or continueChoice == 'y' or continueChoice == 'Yes' or continueChoice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
 
-        print("Age Group")
-        for i, option in enumerate(ageGroup_options[:-1]):
-            print("\t%s)" % (i+1), option)
-        ageGroupChoice = inputPrompt(ageGroup_options[:-1], len(ageGroup_options)-1)
 
-        print("Occupation")
-        for i, option in enumerate(occupation_options[:-1]):
-            print("\t%s)" % (i+1), option)
-        occupationChoice = inputPrompt(occupation_options[:-1], len(occupation_options)-1)
-        if occupationChoice == 5: # change not stated
-            occupationChoice = 9
-
-        updateQuery = "UPDATE BackgroundInfo SET region = %d, episodeWeek = %d, gender = %d, ageGroup = %d, occupation = %d WHERE caseID = %d" % (regionChoice, timeLineChoice+35, genderChoice, ageGroupChoice, occupationChoice, caseId)
-        # print(updateQuery)
-
-        cursor.execute(updateQuery)
-
-        # Save all changes to the database
-        print("Record successfully updated!")
-        mydb.commit()
 
 #### Main Code ####
 home_screen_menu()

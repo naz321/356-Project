@@ -1,7 +1,7 @@
 from mysqlInformation import *
 
 # Regular Options
-main_options = ["Confirmed COVID-19 Cases", "Deaths", "Recovered", "Transmission", "COVID-19 Testing", "Report a case of COVID-19", "Add a new location", "Government Login", "Exit"]
+main_options = ["Confirmed COVID-19 Cases", "Deaths From COVID-19", "Recovered From COVID-19", "Transmission", "COVID-19 Testing", "Report a new case of COVID-19", "Add a new location", "Government Login", "Exit"]
 background_information_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "More than 1 Filter", "Go Back"]
 death_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Deaths", "More than 1 Filter", "Go Back"]
 recovered_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Recovered", "More than 1 Filter", "Go Back"]
@@ -16,6 +16,7 @@ transmissions_options = ["Region", "Timeline", "Gender", "Age group", "Occupatio
 asymptomatic_options = ["Yes", "No", "Don't care", "Go Back"]
 transmissions_type_options = ["Contact of COVID Case", "Internation Travel", "Don't Care", "Go Back"]
 recovered_or_died_options = ["Recovered", "Died", "Currently Infected"]
+update_or_delete_options = ["Update Data", "Delete Data"]
 
 # Combined Filter Options
 region_options_all = ["Atlantic (New Brunswick, Nova Scotia, Prince Edward Island, Newfoundland and Labrador)", "Quebec", "Ontario and Nunavut", "Prairies (Alberta, Saskatchewan, Manitoba, Northwest Territories)", "Northwest Territories (British Columbia, Yukon)", "All"]
@@ -185,3 +186,86 @@ def combinedFilter_menu():
     #     print("\t" + chr(ord('a') + i) + ")\t" + option)
 
     # print (67 * "-")
+
+def updateData(caseId):
+    print("Region")
+    newRegionOptionsFromDb = getNewRegionOptions()   
+    for i, option in enumerate(newRegionOptionsFromDb[:-1]):
+        print("\t%s)" % (i+1), option)
+    regionChoice = inputPrompt(newRegionOptionsFromDb[:-1], len(newRegionOptionsFromDb)-1)
+
+    print("Timeline")
+    for i, option in enumerate(timeline_options[:-1]):
+        print("\t%s)" % (i+1), option)
+    timeLineChoice = inputPrompt(timeline_options[:-1], len(timeline_options)-1)
+
+    print("Gender")
+    for i, option in enumerate(gender_options[:-1]):
+        print("\t%s)" % (i+1), option)
+    genderChoice = inputPrompt(gender_options[:-1], len(gender_options)-1)
+    if genderChoice == 3: # change non stated/other
+        genderChoice = 9
+
+    print("Age Group")
+    for i, option in enumerate(ageGroup_options[:-1]):
+        print("\t%s)" % (i+1), option)
+    ageGroupChoice = inputPrompt(ageGroup_options[:-1], len(ageGroup_options)-1)
+
+    print("Occupation")
+    for i, option in enumerate(occupation_options[:-1]):
+        print("\t%s)" % (i+1), option)
+    occupationChoice = inputPrompt(occupation_options[:-1], len(occupation_options)-1)
+    if occupationChoice == 5: # change not stated
+        occupationChoice = 9
+
+    updateQuery = "UPDATE BackgroundInfo SET region = %d, episodeWeek = %d, gender = %d, ageGroup = %d, occupation = %d WHERE caseID = %d" % (regionChoice, timeLineChoice+35, genderChoice, ageGroupChoice, occupationChoice, caseId)
+    # print(updateQuery)
+
+    cursor.execute(updateQuery)
+
+    print("Did the patient recover or did they die or are they currently infected?")
+    for i, option in enumerate(recovered_or_died_options):
+        print("\t%s)" % (i+1), option)
+    currentStatus = inputPrompt(recovered_or_died_options, len(recovered_or_died_options))
+
+    if currentStatus == 1 or currentStatus == 2:
+        print("Hospital Status")
+        for i, option in enumerate(hospitalization_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        hospitalizationChoice = inputPrompt(hospitalization_options[:-1], len(hospitalization_options)-1)
+
+        if currentStatus == 1: # Insert into recovered table
+            updateRecoveredQuery = "UPDATE Recovered SET hospitalStatus = %d WHERE caseID = %d" % (hospitalizationChoice, caseId)
+            # print(insertRecoveredQuery)
+            cursor.execute(updateRecoveredQuery)
+        elif currentStatus == 2: # Insert into deaths table
+            updateDeathQuery = "UPDATE Deaths SET hospitalStatus = %d WHERE caseID = %d" % (hospitalizationChoice, caseId)
+            # print(insertDeathQuery)
+            cursor.execute(updateDeathQuery)
+    
+    # Save all changes to the database
+    print("Record successfully updated!")
+    mydb.commit()
+
+def deleteData(caseId):
+    print("Did the patient recover or did they die or are they currently infected?")
+    for i, option in enumerate(recovered_or_died_options):
+        print("\t%s)" % (i+1), option)
+    currentStatus = inputPrompt(recovered_or_died_options, len(recovered_or_died_options))
+
+    # Delete children first because of Fk reference
+    if currentStatus == 1:
+        deleteRecoveredQuery = "DELETE FROM Recovered WHERE caseID = %d" % caseId
+        cursor.execute(deleteRecoveredQuery)
+    elif currentStatus == 2:
+        deleteDeathQuery = "DELETE FROM Deaths WHERE caseID = %d" % caseId
+        cursor.execute(deleteDeathQuery)
+    
+    # Delete from Background information
+    deleteFromTransmissionsQuery = "DELETE FROM Transmissions WHERE caseID = %d" % caseId
+    cursor.execute(deleteFromTransmissionsQuery)
+    deleteBackgroundInfoQuery = "DELETE FROM BackgroundInfo WHERE caseID = %d" % caseId
+    cursor.execute(deleteBackgroundInfoQuery)
+
+    print("Record successfully deleted!")
+    mydb.commit()
