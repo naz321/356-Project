@@ -131,7 +131,7 @@ def transmission_loop(a_choice, t_choice):
         elif choice==6:
             allTransmissions()
         elif choice==7:
-             combinedFilter_loop_recovered()
+             combinedFilter_loop_transmissions(a_choice, t_choice)
         elif choice==8:
             break
         else:
