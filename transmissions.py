@@ -154,5 +154,5 @@ def allTransmissions():
     cursor.execute("SELECT COUNT(*) FROM Transmissions") 
     print("There were a total of ", cursor.fetchone()[0], "transmissions due to COVID-19")
     
-def combinedFilter_loop_death():
-    print("Combined Filter")
+# def combinedFilter_loop_death():
+#     print("Combined Filter")

@@ -24,6 +24,7 @@ timeline_options_all = ["Week 36 (Week of September 6th)", "Week 37 (Week of Sep
 gender_options_all = ["Male", "Female", "Not Stated/Other", "All"]
 ageGroup_options_all = ["0-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-79", "80+", "All"]
 occupation_options_all = ["Health Care Workers", "School or daycare workers", "Long term care residents", "Other", "Not Stated", "All"]
+hospitalization_options_all = ["Hospitalized (ICU)", "Hospitalized (Non-ICU)", "Non-Hospitalized", "Not stated", "All"]
 
 def inputPrompt(options, maxValue):
     while True:

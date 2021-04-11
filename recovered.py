@@ -136,4 +136,170 @@ def allRecovered():
     print("There were a total of", cursor.fetchone()[0], "recovered cases of COVID-19 ")
     
 def combinedFilter_loop_recovered():
-    print("Combined Filter")
+    while True:
+        print (30 * "-" , "MENU" , 30 * "-")
+
+        print("Region")
+        newRegionOptionsFromDb = getNewRegionOptions()
+        newRegionOptionsFromDb[-1] = "All"  
+        while True:
+            for i, option in enumerate(newRegionOptionsFromDb):
+                print("\t%s)" % (i+1), option)
+            regionChoice = input("Input as a list separated by commas and press enter: ") or str(len(newRegionOptionsFromDb))
+
+            invalidChoice = 0
+            for choice in regionChoice.split(","):
+                if int(choice) > len(newRegionOptionsFromDb):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Timeline")
+        while True:
+            for i, option in enumerate(timeline_options_all):
+                print("\t%s)" % (i+1), option)
+            timeLineChoice = input("Input as a list separated by commas and press enter: ") or str(len(timeline_options_all))
+
+            invalidChoice = 0
+            for choice in timeLineChoice.split(","):
+                if int(choice) > len(timeline_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Gender")
+        while True:
+            for i, option in enumerate(gender_options_all):
+                print("\t%s)" % (i+1), option)
+            genderChoice = input("Input as a list separated by commas and press enter: ") or str(len(gender_options_all))
+
+            invalidChoice = 0
+            for choice in genderChoice.split(","):
+                if int(choice) > len(gender_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Age Group")
+        while True:
+            for i, option in enumerate(ageGroup_options_all):
+                print("\t%s)" % (i+1), option)
+            ageGroupChoice = input("Input as a list separated by commas and press enter: ") or str(len(ageGroup_options_all))
+
+            invalidChoice = 0
+            for choice in ageGroupChoice.split(","):
+                if int(choice) > len(ageGroup_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Occupation")
+        while True:
+            for i, option in enumerate(occupation_options_all):
+                print("\t%s)" % (i+1), option)
+            occupationChoice = input("Input as a list separated by commas and press enter: ") or str(len(occupation_options_all))
+
+            invalidChoice = 0
+            for choice in occupationChoice.split(","):
+                if int(choice) > len(occupation_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Hospitalization")
+        while True:
+            for i, option in enumerate(hospitalization_options_all):
+                print("\t%s)" % (i+1), option)
+            hospitilizationChoice = input("Input as a list separated by commas and press enter: ") or str(len(occupation_options_all))
+
+            invalidChoice = 0
+            for choice in hospitilizationChoice.split(","):
+                if int(choice) > len(hospitalization_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        
+        print (67 * "-")
+
+        if str(len(newRegionOptionsFromDb)) in regionChoice and \
+            str(len(timeline_options_all)) in timeLineChoice and \
+            str(len(gender_options_all)) in genderChoice and \
+            str(len(ageGroup_options_all)) in ageGroupChoice and \
+            str(len(occupation_options_all)) in occupationChoice and \
+            str(len(hospitalization_options_all)) in hospitilizationChoice:
+            baseQuery = "SELECT COUNT(*) FROM Recovered"
+        else:
+            baseQuery = "SELECT COUNT(*) FROM Recovered inner join BackgroundInfo on Recovered.caseID = BackgroundInfo.caseID WHERE "
+
+            if regionChoice and (str(len(newRegionOptionsFromDb)) not in regionChoice):
+                baseQuery += "BackgroundInfo.region IN (%s) AND " % regionChoice
+
+            if timeLineChoice and (str(len(timeline_options_all)) not in timeLineChoice):
+                newTimeLineChoice = timeLineChoice.split(",")
+                for i in range (len(newTimeLineChoice)):
+                    newTimeLineChoice[i] = str(int(newTimeLineChoice[i])+35)
+                timeLineChoice = ','.join(newTimeLineChoice)
+                baseQuery += "BackgroundInfo.episodeWeek IN (%s) AND " % timeLineChoice
+
+            if genderChoice and (str(len(gender_options_all)) not in genderChoice):
+                baseQuery += "BackgroundInfo.gender IN (%s) AND " % genderChoice
+
+            if ageGroupChoice and (str(len(ageGroup_options_all)) not in ageGroupChoice):
+                baseQuery += "BackgroundInfo.ageGroup IN (%s) AND " % ageGroupChoice
+
+            if occupationChoice and (str(len(occupation_options_all)) not in occupationChoice):
+                baseQuery += "BackgroundInfo.occupation IN (%s) AND " % occupationChoice
+
+            if hospitilizationChoice and (str(len(hospitalization_options_all)) not in hospitilizationChoice):
+                baseQuery += "hospitalStatus IN (%s)" % hospitilizationChoice
+
+        # Remove any unncessary "AND"
+        # example: SELECT COUNT(*) FROM BackgroundInfo WHERE region IN (1) AND
+        if "AND" in baseQuery[-4:]:
+            baseQuery = baseQuery[:-4]
+        
+        # print(baseQuery)
+        cursor.execute(baseQuery) 
+        print("Based on your query there were", cursor.fetchone()[0], "confirmed recoveries from COVID-19.")
+ 
+        choice = input("Would you like to continue [y/n]: ")
+
+        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
+            break
+        elif choice == 'Y' or choice == 'y' or choice == 'Yes' or choice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
+    
+    return
