@@ -265,7 +265,7 @@ def new_location_loop():
         # Add changes to new list
         region_options.insert(-1, "%s (%s)" %(city, province))
 
-        choice = input("Would you like to report another case [y/n]: ")
+        choice = input("Would you like to add a new location [y/n]: ")
 
         if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
             break

@@ -16,11 +16,12 @@ select '----------------------------------------------------------------' as '';
 select 'Location' as '';
 
 create table Location (
-			region decimal(1),
+			region int,
 			groupName varchar(255),
 			provinces varchar(255),
             -- Constraints
-            primary key (region)
+            primary key (region),
+            check (region != '')
 		       );
 
 load data infile '/var/lib/mysql-files/finalProject/Location.csv' ignore into table Location
@@ -33,7 +34,7 @@ select '----------------------------------------------------------------' as '';
 select 'Weekly Testing' as '';
 
 create table WeeklyTesting (
-			region decimal(1),
+			region int,
 			abbreviation varchar(2),
 			episodeWeek decimal(2),
 			dailyTested int,
@@ -52,7 +53,7 @@ select 'Background Info' as '';
 
 create table BackgroundInfo (
             caseID int NOT NULL AUTO_INCREMENT,
-			region decimal(1),
+			region int,
 			episodeWeek decimal(2),
 			gender decimal(1),
 			ageGroup decimal(2),
