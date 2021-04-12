@@ -78,7 +78,7 @@ def transmissions_type_menu():
     print (67 * "-")
 
 def getNewRegionOptions():
-    cursor.execute("SELECT CONCAT(groupName,' ','(', provinces ,')') FROM Location;") 
+    cursor.execute("SELECT CONCAT(groupName,' ','(', provinces ,')') FROM Location WHERE groupName != '' AND provinces != ''") 
     result = cursor.fetchall()
     regionOptions =  [row[0] for row in result]
     regionOptions.append("Go Back") 
