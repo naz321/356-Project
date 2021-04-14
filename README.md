@@ -5,10 +5,12 @@
 
 ## Instructions
 1) Open VS Code
-2) In terminal run: `pip install mysql-connector-python`
+2) In terminal run: `pip3 install mysql-connector-python`, `pip3 install -U scikit-learn scipy matplotlib`, `pip install graphviz`
 3) Open `mysqlInformation.py` and edit database settings
-4) Open `client.py` and Run `client.py`
-5) Play around with the CLI
+4) In terminal, navigate to the root of this project (or else the relative file names won't work)
+5) Open `client.py` and Run `client.py`
+6) Play around with the CLI
 
 ## Example Command Line Interface
-![image](https://user-images.githubusercontent.com/38430052/112724704-ffcc4280-8eea-11eb-96c1-84635b19d459.png)
+![image](https://user-images.githubusercontent.com/38430052/114743859-12cc7880-9d1b-11eb-8ba7-f4d6f6c4f49f.png)
+
