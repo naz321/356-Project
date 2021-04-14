@@ -126,19 +126,19 @@ def agegroup_loop_transmissions(a, t):
             if choice>=1 and choice <= 8:
                 if (a != 3 and t == 3):
                     cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s and asymptomatic=%s and tranmissions=%s", (choice, a, 9,)) 
-                    print("There were", cursor.fetchone()[0], "confirmed death due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
+                    print("There were", cursor.fetchone()[0], "transmissions due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
                 elif (t != 3 and a == 3):
                     cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s and asymptomatic=%s and tranmissions=%s", (choice, 9, t,)) 
-                    print("There were", cursor.fetchone()[0], "confirmed death due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
+                    print("There were", cursor.fetchone()[0], "transmissions due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
                 elif (a != 3 and t != 3):
                     cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s and asymptomatic=%s and tranmissions=%s", (choice, a, t,)) 
-                    print("There were", cursor.fetchone()[0], "confirmed death due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
+                    print("There were", cursor.fetchone()[0], "transmissions due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
                 elif (a == 3 and t == 3):
                     cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s and asymptomatic=%s and tranmissions=%s", (choice, 9, 9,)) 
-                    print("There were", cursor.fetchone()[0], "confirmed death due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
+                    print("There were", cursor.fetchone()[0], "transmissions due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
                 else:
                     cursor.execute("SELECT COUNT(*) FROM Transmissions inner join BackgroundInfo on Transmissions.caseID = BackgroundInfo.caseID WHERE BackgroundInfo.ageGroup=%s", (choice,)) 
-                    print("There were", cursor.fetchone()[0], "confirmed death due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
+                    print("There were", cursor.fetchone()[0], "transmissions due to COVID-19 that was in this age group:", ageGroup_options[choice-1])
             elif choice==9:
                 break
             else:
