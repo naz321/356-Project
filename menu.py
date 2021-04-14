@@ -1,7 +1,7 @@
 from mysqlInformation import *
 
 # Regular Options
-main_options = ["Confirmed COVID-19 Cases", "Deaths From COVID-19", "Recovered From COVID-19", "Transmission", "COVID-19 Testing", "Report a new case of COVID-19", "Add a new location", "Government Login", "Exit"]
+main_options = ["Confirmed COVID-19 Cases", "Deaths From COVID-19", "Recovered From COVID-19", "Transmission", "COVID-19 Testing", "Report a new case of COVID-19", "Add a new location", "Check Survivability Rate (Data Mining)", "Government Login", "Exit"]
 background_information_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "More than 1 Filter", "Go Back"]
 death_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Deaths", "More than 1 Filter", "Go Back"]
 recovered_options = ["Region", "Timeline", "Gender", "Age Group", "Occupation", "Hospitalization", "All Recovered", "More than 1 Filter", "Go Back"]

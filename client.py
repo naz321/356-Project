@@ -4,6 +4,7 @@ from death import *
 from recovered import *
 from weeklyTesting import *
 from transmissions import *
+from Data_Mining.dataMining import *
 
 def general_information_loop():
 
@@ -326,6 +327,56 @@ def edit_data_loop():
         else:
             input("Wrong option selection. Enter any key to try again..")
 
+def data_mining_loop():
+    # Create decision tree
+    read_data()
+
+    while True:
+        input_data = []
+        print("Please enter a hypothetical situation starting with:")
+        print("Region")
+        newRegionOptionsFromDb = getNewRegionOptions()   
+        for i, option in enumerate(newRegionOptionsFromDb[:-1]):
+            print("\t%s)" % (i+1), option)
+        input_data.append(inputPrompt(newRegionOptionsFromDb[:-1], len(newRegionOptionsFromDb)-1))
+
+        print("Timeline")
+        for i, option in enumerate(timeline_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        input_data.append(inputPrompt(timeline_options[:-1], len(timeline_options)-1)+35)
+
+        print("Gender")
+        for i, option in enumerate(gender_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        genderChoice = inputPrompt(gender_options[:-1], len(gender_options)-1)
+        if genderChoice == 3: # change non stated/other
+            genderChoice = 9
+        input_data.append(genderChoice)
+
+        print("Age Group")
+        for i, option in enumerate(ageGroup_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        input_data.append(inputPrompt(ageGroup_options[:-1], len(ageGroup_options)-1))
+
+        print("Occupation")
+        for i, option in enumerate(occupation_options[:-1]):
+            print("\t%s)" % (i+1), option)
+        occupationChoice = inputPrompt(occupation_options[:-1], len(occupation_options)-1)
+        if occupationChoice == 5: # change not stated
+            occupationChoice = 9
+        input_data.append(occupationChoice)
+
+        # Peform Data Mining
+        data_mine(input_data)
+        
+        continueChoice = input("Would you like to continue [y/n]: ")
+
+        if continueChoice == 'N' or continueChoice == 'n' or continueChoice == 'No' or continueChoice == 'no':
+            break
+        elif continueChoice == 'Y' or continueChoice == 'y' or continueChoice == 'Yes' or continueChoice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
 
 
 #### Main Code ####
@@ -351,8 +402,10 @@ def main():
         elif choice==7:
             new_location_loop()
         elif choice==8:
-            edit_data_loop()
+            data_mining_loop()
         elif choice==9:
+            edit_data_loop()
+        elif choice==10:
             print("Goodbye!")
             break
 
