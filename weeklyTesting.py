@@ -90,9 +90,9 @@ def regionAndTimeline_loop():
 
         if str(len(newRegionOptionsFromDb)) in regionChoice and \
             str(len(timeline_options_all)) in timeLineChoice:
-            baseQuery = "SELECT COUNT(*) FROM WeeklyTesting"
+            baseQuery = "SELECT sum(DailyTested) FROM WeeklyTesting"
         else:
-            baseQuery = "SELECT COUNT(*) FROM WeeklyTesting WHERE "
+            baseQuery = "SELECT sum(DailyTested) FROM WeeklyTesting WHERE "
 
             if regionChoice and (str(len(newRegionOptionsFromDb)) not in regionChoice):
                 baseQuery += " region IN (%s) AND " % regionChoice
@@ -102,7 +102,7 @@ def regionAndTimeline_loop():
                 for i in range (len(newTimeLineChoice)):
                     newTimeLineChoice[i] = str(int(newTimeLineChoice[i])+35)
                 timeLineChoice = ','.join(newTimeLineChoice)
-                baseQuery += "episodeWeek IN (%s) AND " % timeLineChoice
+                baseQuery += "episodeWeek IN (%s)" % timeLineChoice
 
         # Remove any unncessary "AND"
         # example: SELECT COUNT(*) FROM BackgroundInfo WHERE region IN (1) AND
@@ -111,7 +111,7 @@ def regionAndTimeline_loop():
         
         # print(baseQuery)
         cursor.execute(baseQuery) 
-        print("Based on your query there were", cursor.fetchone()[0], "transmissions due to COVID-19.")
+        print("Based on your query there were", cursor.fetchone()[0], " COVID-19 tests conducted ")
  
         choice = input("Would you like to continue [y/n]: ")
 
