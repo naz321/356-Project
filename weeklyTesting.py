@@ -45,4 +45,81 @@ def timeline_testing_loop():
     return
 
 def regionAndTimeline_loop():
-    print("Region and Timeline")
+    while True:
+        print (30 * "-" , "MENU" , 30 * "-")
+
+        print("Region")
+        newRegionOptionsFromDb = getNewRegionOptions()
+        newRegionOptionsFromDb[-1] = "All"  
+        while True:
+            for i, option in enumerate(newRegionOptionsFromDb):
+                print("\t%s)" % (i+1), option)
+            regionChoice = input("Input as a list separated by commas and press enter: ") or str(len(newRegionOptionsFromDb))
+
+            invalidChoice = 0
+            for choice in regionChoice.split(","):
+                if int(choice) > len(newRegionOptionsFromDb):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+
+        print("Timeline")
+        while True:
+            for i, option in enumerate(timeline_options_all):
+                print("\t%s)" % (i+1), option)
+            timeLineChoice = input("Input as a list separated by commas and press enter: ") or str(len(timeline_options_all))
+
+            invalidChoice = 0
+            for choice in timeLineChoice.split(","):
+                if int(choice) > len(timeline_options_all):
+                    input("Wrong option selection. Enter any key to try again..")
+                    invalidChoice = -1
+                    break
+
+            if invalidChoice == -1:
+                continue
+            else:
+                break
+        
+        print (67 * "-")
+
+        if str(len(newRegionOptionsFromDb)) in regionChoice and \
+            str(len(timeline_options_all)) in timeLineChoice:
+            baseQuery = "SELECT COUNT(*) FROM WeeklyTesting"
+        else:
+            baseQuery = "SELECT COUNT(*) FROM WeeklyTesting WHERE "
+
+            if regionChoice and (str(len(newRegionOptionsFromDb)) not in regionChoice):
+                baseQuery += " region IN (%s) AND " % regionChoice
+
+            if timeLineChoice and (str(len(timeline_options_all)) not in timeLineChoice):
+                newTimeLineChoice = timeLineChoice.split(",")
+                for i in range (len(newTimeLineChoice)):
+                    newTimeLineChoice[i] = str(int(newTimeLineChoice[i])+35)
+                timeLineChoice = ','.join(newTimeLineChoice)
+                baseQuery += "episodeWeek IN (%s) AND " % timeLineChoice
+
+        # Remove any unncessary "AND"
+        # example: SELECT COUNT(*) FROM BackgroundInfo WHERE region IN (1) AND
+        if "AND" in baseQuery[-4:]:
+            baseQuery = baseQuery[:-4]
+        
+        # print(baseQuery)
+        cursor.execute(baseQuery) 
+        print("Based on your query there were", cursor.fetchone()[0], "transmissions due to COVID-19.")
+ 
+        choice = input("Would you like to continue [y/n]: ")
+
+        if choice == 'N' or choice == 'n' or choice == 'No' or choice == 'no':
+            break
+        elif choice == 'Y' or choice == 'y' or choice == 'Yes' or choice == 'yes':
+            continue
+        else:
+            input("Wrong option selection. Enter any key to try again..")
+    
+    return
